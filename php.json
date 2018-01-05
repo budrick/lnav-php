@@ -8,7 +8,7 @@
                 "pattern": "^\\[(?<date>\\d{2}-\\w{3}-\\d{4}) (?<timestamp>\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?)\\] (?<level>[A-Z]+): (\\[(?<type>\\w+\\ \\w+)\\])?(?:pid (?<pid>\\d{1,8}),)?(?<body>.*)$"
             },
             "error": {
-                "pattern": "^\\[(?<date>\\d{2}-\\w{3}-\\d{4}) (?<timestamp>\\d{2}:\\d{2}:\\d{2}) (?<timezone>\\w+/\\w+)\\] PHP\\s+(?<body>.*)$"
+                "pattern": "^\\[(?<date>\\d{2}-\\w{3}-\\d{4}) (?<timestamp>\\d{2}:\\d{2}:\\d{2}) (?<timezone>.+?)\\] PHP\\s+(?<level>(Notice|Deprecated|Catchable fatal error|Fatal error|Warning)?)(?<body>.*)$"
             }
         },
         "value": {
@@ -20,17 +20,19 @@
         },
         "level-field": "level",
         "level": {
-            "error": "ERROR",
-            "warning": "WARNING",
-            "info": "NOTICE",
-            "debug": "DEBUG"
+            "fatal": "Fatal error|Catchable fatal error",
+            "error": "ERROR|Error",
+            "warning": "WARNING|Warning",
+            "info": "NOTICE|Notice",
+            "debug": "DEBUG|Deprecated"
         },
         "sample": [
             { "line" : "[29-Oct-2015 13:17:53] NOTICE: Terminating ..." },
             { "line" : "[29-Oct-2015 09:11:20] NOTICE: [pool www] 'group' directive is ignored when FPM is not running as root" },
             { "line" : "[03-Dec-2015 16:37:35.430903] DEBUG: pid 5135, fpm_socket_af_inet_listening_socket(), line 308: Found address for 127.0.0.1, socket opened on 127.0.0.1" },
             { "line" : "[03-Dec-2015 16:37:36.505733] DEBUG: pid 5135, fpm_pctl_perform_idle_server_maintenance(), line 379: [pool www] currently 0 active children, 3 spare children" },
-            { "line" : "[05-Nov-2015 10:27:32 Europe/London] PHP Catchable fatal error:  Argument 1 passed to Something" }
+            { "line" : "[05-Nov-2015 10:27:32 Europe/London] PHP Notice:  Argument 1 passed to Something", "level":"info"  },
+            { "line" : "[05-Nov-2015 10:27:32 Europe/London] PHP Catchable fatal error:  Argument 1 passed to Something", "level": "fatal" }
         ]
     }
 }
